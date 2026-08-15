@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>諾娃當沖模擬器 V1</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#07111f;
+  color:#f3f6ff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.wrap{max-width:760px;margin:auto;padding:16px}
+h1{font-size:25px;margin:8px 0}
+.sub{color:#91a4c4;font-size:14px;margin-bottom:15px}
+
+.card{
+  background:#101d31;
+  border:1px solid #253957;
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:13px;
+}
+.title{font-size:18px;font-weight:800;margin-bottom:12px}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.box{
+  background:#081426;
+  padding:11px;
+  border-radius:12px;
+}
+.label{font-size:12px;color:#8fa4c5}
+.value{font-size:20px;font-weight:800;margin-top:4px}
+
+.green{color:#37e391}
+.red{color:#ff626e}
+.yellow{color:#ffd166}
+.blue{color:#5db5ff}
+
+select,input{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #344d70;
+  background:#09172a;
+  color:white;
+  font-size:16px;
+  margin-bottom:9px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:8px;
+  border:0;
+  border-radius:11px;
+  font-size:16px;
+  font-weight:800;
+}
+.scan{background:#1677ff;color:white}
+.buy{background:#e84855;color:white}
+.sell{background:#19a86b;color:white}
+.close{background:#ffb020;color:#111}
+.reset{background:#263b59;color:white}
+
+.stock{
+  padding:12px 0;
+  border-bottom:1px solid #253957;
+}
+.stock:last-child{border:0}
+
+.stockrow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.name{font-weight:800}
+.small{font-size:12px;color:#8fa4c5}
+
+.badge{
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:800;
+}
+.ok{background:#153f32;color:#42e49c}
+.wait{background:#493d18;color:#ffd166}
+
+.signal{
+  font-size:22px;
+  font-weight:900;
+  text-align:center;
+  padding:12px;
+}
+.log{
+  max-height:230px;
+  overflow:auto;
+  font-size:13px;
+  line-height:1.6;
+}
+.notice{
+  color:#ffcf67;
+  font-size:12px;
+  line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>⚡ 諾娃當沖模擬器 V1</h1>
+<div class="sub">手機版｜台股超短線｜模擬交易模式</div>
+
+<div class="card">
+<div class="title">📡 市場掃描</div>
+
+<button class="scan" onclick="scanMarket()">開始掃描當沖標的</button>
+
+<div id="stocks"></div>
+</div>
+
+<div class="card">
+<div class="title">🎯 當沖訊號</div>
+
+<select id="stockSelect">
+<option value="2330">2330 台積電</option>
+<option value="2317">2317 鴻海</option>
+<option value="2454">2454 聯發科</option>
+<option value="2303">2303 聯電</option>
+<option value="2382">2382 廣達</option>
+<option value="3231">3231 緯創</option>
+<option value="6669">6669 緯穎</option>
+<option value="2603">2603 長榮</option>
+<option value="2615">2615 萬海</option>
+<option value="2881">2881 富邦金</option>
+<option value="2882">2882 國泰金</option>
+<option value="2886">2886 兆豐金</option>
+<option value="2327">2327 國巨</option>
+<option value="2344">2344 華邦電</option>
+<option value="2408">2408 南亞科</option>
+</select>
+
+<div class="grid">
+<div class="box">
+<div class="label">模擬價格</div>
+<div id="price" class="value">--</div>
+</div>
+
+<div class="box">
+<div class="label">大戶動能</div>
+<div id="big" class="value">--</div>
+</div>
+
+<div class="box">
+<div class="label">短線動能</div>
+<div id="momentum" class="value">--</div>
+</div>
+
+<div class="box">
+<div class="label">成交量強度</div>
+<div id="volume" class="value">--</div>
+</div>
+</div>
+
+<div id="signal" class="signal yellow">
+等待掃描
+</div>
+
+<button class="
